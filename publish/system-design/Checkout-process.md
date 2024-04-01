@@ -1,4 +1,8 @@
-When a user checks out products from a shopping cart and gets redirected to a payment processor, several HTTP interactions occur between the client (the user's browser), the merchant's server (the website where the shopping cart resides), and the payment processor's server. Here's a simplified overview of the data flow and the HTTP status codes that might be involved when things go right or wrong:
+When a user checks out products from a shopping cart and gets redirected to a payment processor, several HTTP interactions occur between the client (the user's browser), the merchant's server (the website where the shopping cart resides), and the payment processor's server. 
+
+
+
+Here's a simplified overview of the data flow and the HTTP status codes that might be involved when things go right or wrong:
 
 ### Data Flow for Successful Transaction
 
