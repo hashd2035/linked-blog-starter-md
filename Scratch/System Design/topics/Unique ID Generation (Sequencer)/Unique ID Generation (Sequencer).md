@@ -102,6 +102,6 @@ incorporate additional factor of time in the generation of IDs and explain the p
 
 
 ## Related Case Studies
-[[URL Shortener]]
+[[Scratch/System Design/case-studies/URL Shortener/URL Shortener]]
 [[Whatsapp]]
 

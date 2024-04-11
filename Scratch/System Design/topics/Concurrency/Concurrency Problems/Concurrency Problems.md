@@ -1,3 +1,6 @@
+---
+icon: luc_briefcase
+---
 ```toc
 ```
 [[Concurrency in Java]]
@@ -142,6 +145,7 @@ public class AtomicSequenceGenerator implements SequenceGenerator {
 ```
 
 ## Problem: Thread-safe Singleton
+https://www.baeldung.com/java-singleton-double-checked-locking
 
 ```java
 package com.ik.backend.concurrency.design_pattern;
@@ -196,3 +200,6 @@ public class Singleton {
 
 ## Problem: Signaling
 
+
+
+https://stackoverflow.com/questions/1970345/what-is-thread-contention

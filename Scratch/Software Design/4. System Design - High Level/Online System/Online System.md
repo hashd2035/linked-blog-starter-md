@@ -1,0 +1,1 @@
+[[Scratch/Software Design/4. System Design - High Level/Online System/URL Shortener| URL Shortener - HLD]], Deep down on [[Scratch/System Design/case-studies/URL Shortener/URL Shortener|URL Shortener - Deep Down]]
