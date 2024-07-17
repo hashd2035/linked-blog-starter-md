@@ -177,7 +177,6 @@ Design a storage solution for a web-crawler that scrapes the product and pricing
 	- That will change in-memory requirement
 - Product similarity graph / similarity search
 	- Vector Database?
-
 #### Database size calculation
 - Assume 10 million unique product pages
 - Average page size = 2MB
@@ -187,3 +186,127 @@ Design a storage solution for a web-crawler that scrapes the product and pricing
 	- url (50 bytes), hash (16 bytes), blob (16 bytes), title (60 bytes), description (150 bytes), last updated (8 bytes) Total = 300 bytes
 - 10 million rows = ~ 3GB of document storage
 - Can be easily stored in horizontally scalable MongoDB cluster
+#### HLD
+![[Which Database 2024-04-11 10.53.34.excalidraw]]
+
+#### Observations
+- Combined strengths of various databases / storage solutions
+	- Sometimes, we may <u>not have this luxury</u> and we may have to come up with alternate solution
+- <u>Sharded requests</u> by design (e.g. data and CDN resources on separate paths)
+- Hosted solutions that <u>scale horizontally</u> (e.g. DynamoDB, Redis, Elastic Search)
+- <u>Eventual consistency</u> as and when pages are scraped and indexed
+
+
+## Case Study: The payment system from Google Play store
+https://uplevel.interviewkickstart.com/resource/associated-class-video-706812-1524-47255-1
+1:39:55
+
+Design the payment system for the Google Play store. Define the type of database you would use and why? Design entity and relationships that satisfy storage requirements
+
+
+## Case Study: Social Media website
+3:12:12
+
+Select a database type(s) for a social media website that includes search, user connections, user feeds, ads as well as payments. Design for scalability given peak events and hours. Design ER diagram for a subsection of the entities indicating entities , relationships and constraints.
+
+## Case Study: 
+3:28:33
+
+Design a data warehousing solution for an ecommerce website where metrics regarding product sales and customers are required on various frequencies (hourly, daily, monthly, quarterly and yearly). Ref. Shopify API: https://shopify.dev/api
+
+## Database Design Assignment
+
+ List clarifying questions you would ask the interviewer. Interviewers often give interviewees incomplete information. They expect you to ask the questions necessary to solve the problem.
+ Answer the clarifying questions posed in part 1. State your assumptions. Answer your own questions for now.
+
+Describe the architecture of your solution at a high level. 
+Databases are part of the larger system architecture. What does the overall system architecture look like? What are the data flows? Will you have APIs, queues, streams, etc? It could be helpful to draw some diagrams, along with writing notes. Then, identify where database systems will be necessary to manage data.
+
+List the databases your design requires. 
+For example, your design may require three (any number of databases, really) databases, and you choose SQL, ElasticSearch, and MongoDB.
+
+- For each database, list the requirements. The requirements include latency, size, transactional/consistency requirements, update frequency, etc.
+- For each database, describe the data the database will contain. Will the data have a fixed schema? Is the data relational or unstructured? You may find it helpful to diagram the schema and think about fields and relations.
+- For each database, explain why you chose that system over other options. For example, say you choose a SQL relational database for a specific use case. What are the advantages of using that traditional relational database over using a NoSQL option? Consider possible alternatives. What are the advantages of your database choice over others? Advantages may include cost, latency, scalability, simplicity, security, etc.
+
+### Question 1: Design LinkedIn’s messaging system
+
+##### FR / Use cases
+1. 1:1 messages (not group chatting) with multiple people
+	1. Messages (causal ordering) should be in order -> Vector clock (sequence)
+2. can share contact info 
+3. User side and Recruiter side may be different
+4. attach file (e.g. resume)
+5. History never gets deleted
+6. Most recent chat get to the top (recently used order is important)
+	1. Top 10 or 20 are shown. Others are shown when scrolled down
+7. Push Notification when some one messaged 
+8. Read receipt?
+9. Comments on msg? Reply to a certain thread/message
+
+##### **Non Functional Requirement****
+1. Causal ordering is important, but, eventual consistency is okay
+2. High availability, Reliability, Durability 
+3. Scalability
+4. Low Latency?
+
+##### **API** (ask question how would you implement this - system design / data query)
+- sendChat(sender, receiver, msg) -> chatId, msgId
+- sendChat(chatroomId, msg, attachment) -< msgId
+- shareContact(chatroomId, msg)
+- getRecentChat(pagination)
+- search chat?
+- 
+
+##### **Data Model**
+Note: when designing data model, think how we would query the data we need. Also, rationale behind each attributes.
+- ChatRoom (chatRoomId: PK/NN, createdDateTime, lastModifiedDateTime)
+	- Message (messageId: PK/NN, chatRoomId: FK/NN, seq: Integer/NN, dateTime)
+- ChatRoomHistory (memberId, chatRoomId: PK/NN, seq, lastModifiedDateTime)
+- Members (memberId: PK/NN, memberLinkedInAddress: NN, )
+- Followers (memberId: PK, followerId: FK)
+- MemberContactInfo (memberId: PK, phoneNumber, email, linkedInAddress)
+
+**ERD**
+![[Which Database 2024-04-11 16.21.28.excalidraw]]
+Some impacts of this model
+- If you have a graph like that: bob follows judy, judy follows bob you may end in an endless loop.
+- If you want to find followers of followers ... you have to query several times. There are some 
+vendor specific extensions for recursive queries, but plain ANSI SQL doesn't support this 
+(and so your OR Mapper will no support it out of the box).
+
+My point of view: 
+- It is a model, where a relational database doesn't fit well. 
+- A graph DB, like neo4j is a better choise for that case.
+
+This is why data modeling along with choosing database should happen after HLD
+##### HLD
+
+![[Which Database 2024-04-11 16.45.35.excalidraw]]
+
+
+#### Discussion 
+##### How would you write a query to find out which senders: receiver.
+Document Store? Maybe 
+- My take is (In-memory) key/value store, but, ordering preprocessing happens
+	- Append only,  
+	- userid1-userid2-creationTimeStamp as document id ??
+- What if there are lot of messages, so, document in document database 
+- Time series makes sense too
+- RDBMS could be good for Chat system where you can order the rows in fairly cheap fashion. 
+- Can use append only chunks as raw files
+##### How to figure out who I have chat recently?
+- Last_modified_date
+
+
+##### Ashish Kaila's take
+![[Pasted image 20240411184241.png]]
+![[Pasted image 20240411184336.png]]
+![[Pasted image 20240411184455.png]]
+![[Pasted image 20240411184729.png]]
+### Question 2: Design S3
+https://highscalability.com/behind-aws-s3s-massive-scale/
+
+GFS/HDFS, DynamoDB
+
+Pros and Cons of Time Series, Use cases, How they are actually used

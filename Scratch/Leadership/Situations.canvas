@@ -1,0 +1,15 @@
+{
+	"nodes":[
+		{"id":"d364f690f19166b1","type":"text","text":"Jobo.ai - Focus on AI experience, entrepreneurship","x":-140,"y":-460,"width":300,"height":60},
+		{"id":"38de25d309be9cea","type":"text","text":"New Engen - Focus on Backend development","x":-140,"y":-360,"width":300,"height":60},
+		{"id":"e4213140f19a27c4","type":"text","text":"Disney","x":-140,"y":-260,"width":300,"height":60},
+		{"id":"55e283cd8c7fbf8a","type":"text","text":"Nordstrom","x":-140,"y":-160,"width":300,"height":60},
+		{"id":"4838632a8d1b04a8","type":"text","text":"Starbucks","x":-140,"y":-60,"width":300,"height":60},
+		{"id":"6cfaf34cf148a9cd","type":"text","text":"Amazon","x":-140,"y":40,"width":300,"height":60},
+		{"id":"c68a2138cdc381d8","x":600,"y":-580,"width":400,"height":180,"type":"file","file":"Scratch/Leadership/Situations, Task/New Engen - Rearchitecting.md"}
+	],
+	"edges":[
+		{"id":"6867f46c5a95cf5c","fromNode":"d364f690f19166b1","fromSide":"bottom","toNode":"38de25d309be9cea","toSide":"top"},
+		{"id":"8d1f7db9e89641c0","fromNode":"38de25d309be9cea","fromSide":"right","toNode":"c68a2138cdc381d8","toSide":"left"}
+	]
+}
